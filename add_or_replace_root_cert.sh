@@ -30,7 +30,8 @@ if [ -z "$certdbdir" ]; then
 fi
 
 if [ "$certname" != "marketplace-dev-public-root" -a \
-     "$certname" != "marketplace-dev-reviewers-root" ]; then
+     "$certname" != "marketplace-dev-reviewers-root" \
+     "$certname" != "root-ca-reviewers-marketplace" ]; then
   usage
   exit 1
 fi

@@ -8,12 +8,17 @@ Example usage:
 
   rm -Rf certdb.tmp
   ./new_certdb.sh certdb.tmp
-  ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-public-root
-  ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-reviewers-root
+  ./add_or_replace_root_cert.sh certdb.tmp root-ca-reviewers-marketplace
   ./change_trusted_servers.sh full_unagi \
          "https://marketplace-dev.allizom.org,https://marketplace.firefox.com"
   ./push_certdb.sh full_unagi certdb.tmp
 
+If you want to add marketplace-dev support, add one or both of these before
+executing push_certdb.sh
+
+  ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-public-root
+  ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-reviewers-root
+  
 These steps are done in separate scripts so that add_or_replace_root_cert.sh
 can be used for B2G desktop, which doesn't require the push/pull steps.
 
@@ -28,14 +33,12 @@ openSUSE     : sudo zypper install mozilla-nss-tools
 
 Windows:
 
-   cvs -d:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot checkout NSPR NSS
-   cd mozilla/security/nss
+   hg clone https://hg.mozilla.org/projects/nspr
+   hg clone https://hg.mozilla.org/projects/nss
+   cd nss
    OS_TARGET=WIN95 make nss_build_all
-   cd ../../..
-   export NSS=$PWD/mozilla/dist/WINNT6.2_DBG.OBJ
+   cd ..
+   export NSS=$PWD/dist/WIN954.0_DBG.OBJ
    # NSS/bin must be ahead of the rest of the path because NSS and Windows both
    # have tools called "certutil".
    export PATH=$NSS/bin:$NSS/lib:$PATH
-
-
-
