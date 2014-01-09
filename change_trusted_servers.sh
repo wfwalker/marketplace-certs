@@ -17,7 +17,7 @@ if [ -z "$device" -o -z "$servers" ]; then
   echo "usage: ./pull_cert.sh <device> <servers>"
   echo
   echo "<device> will usually be \"full_unagi\""
-  echo "<servers> will usually be \"https://marketplace-dev.allizom.org,https://marketplace.firefox.com\""
+  echo "<servers> will usually be \"https://marketplace-dev.allizom.org,https://marketplace.allizom.org,https://marketplace.firefox.com\""
   exit 1
 fi
 

@@ -10,7 +10,7 @@ Example usage:
   ./new_certdb.sh certdb.tmp
   ./add_or_replace_root_cert.sh certdb.tmp root-ca-reviewers-marketplace
   ./change_trusted_servers.sh full_unagi \
-         "https://marketplace-dev.allizom.org,https://marketplace.firefox.com"
+         "https://marketplace-dev.allizom.org,https://marketplace.allizom.org,https://marketplace.firefox.com"
   ./push_certdb.sh full_unagi certdb.tmp
 
 If you want to add marketplace-dev support, add one or both of these before
@@ -18,6 +18,10 @@ executing push_certdb.sh
 
   ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-public-root
   ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-reviewers-root
+
+If you want to add marketplace-stage support, add the following before executing push_certdb.sh
+
+  ./add_or_replace_root_cert.sh certdb.tmp marketplace-stage-public-root
   
 These steps are done in separate scripts so that add_or_replace_root_cert.sh
 can be used for B2G desktop, which doesn't require the push/pull steps.
