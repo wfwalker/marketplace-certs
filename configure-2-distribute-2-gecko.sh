@@ -19,33 +19,30 @@ rm -Rf certdb.tmp
 echo "\n*** create new temporary cert DB"
 ./new_certdb.sh certdb.tmp
 
-echo "\n*** fetch DER from d2g server"
-echo "wget $d2gHostname/publicKey.der"
+echo "\n*** fetch DER from d2g server at $d2gHostname"
+derFileURL="https://$d2gHostname/publicKey.der"
+wget $derFileURL -O d2g-public-key.der
+wgetResponse=$?
+
+if [ $wgetResponse -ne 0 ]; then
+	echo "could not download DER file from $derFileURL, check your hostname and server and try again"
+	exit 1
+fi
 
 echo "\n*** add d2g cert to temporary cert DB"
 # TODO: use the DER generaeted by d2g here
 ./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-public-root
 
 echo "\n*** find device name"
-
-deviceList="$(adb devices)"
-
-IFS='
-'
-
-device='unknown'
-
-for line in $deviceList; do
-	[[ $line =~ [0-9]*device$ ]] && device=${line%%device}
-done
-
-if [ $device == 'unknown' ] ; then
+device=`./find_device_name.sh`
+if [ $device == 'unknown' ]; then
 	echo "Firefox OS device not found."
 	echo "Please connect your device via ADB, turn it on, unlock it, enable remote debugging, and try again"
-	exit 1
-fi
 
-echo "found device $device"
+	exit 1
+else
+	echo "found device $device"
+fi
 
 echo "\n*** reset trusted marketplace list on device $device to https://$d2gHostname"
 # TODO : put the host name for the d2g service here!
