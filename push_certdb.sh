@@ -25,7 +25,7 @@ if [ ! -d "$certdbdir" ]; then
   exit 1
 fi
 
-echo hello
+echo "Waiting for device"
 
 # Be nice and wait for the user to connect the device
 adb -s $device wait-for-device
@@ -37,7 +37,7 @@ if [ -z "profile" ]; then
   exit 1
 fi
 
-echo "hello"
+echo "Device found"
 
 adb -s $device push "$certdbdir/cert9.db"   data/b2g/mozilla/$profile/cert9.db   
 adb -s $device push "$certdbdir/key4.db"    data/b2g/mozilla/$profile/key4.db    
