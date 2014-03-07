@@ -4,6 +4,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+# For use by a sysadmin or a tester; configures a phone to do beta testing
+# of privileged open web apps
+
+# see https://github.com/wfwalker/marketplace-certs
+# see https://github.com/digitarald/d2g
+# see https://wiki.mozilla.org/Marketplace/Reviewers/Apps/InstallingReviewerCerts
+
 if [ $# -ne 1 ]; then
 	echo "usage: configure-2-distribute-2-gecko.sh <hostname>"
 	exit 1
@@ -20,7 +27,7 @@ echo "\n*** create new temporary cert DB"
 ./new_certdb.sh certdb.tmp
 
 echo "\n*** fetch DER from d2g server at $d2gHostname"
-derFileURL="https://$d2gHostname/publicKey.der"
+derFileURL="http://$d2gHostname/cert"
 wget $derFileURL -O d2g-public-key.der
 wgetResponse=$?
 
@@ -31,7 +38,7 @@ fi
 
 echo "\n*** add d2g cert to temporary cert DB"
 # TODO: use the DER generaeted by d2g here
-./add_or_replace_root_cert.sh certdb.tmp marketplace-dev-public-root
+./add_or_replace_root_cert.sh certdb.tmp d2g-public-key
 
 echo "\n*** find device name"
 device=`./find_device_name.sh`
@@ -44,9 +51,9 @@ else
 	echo "found device $device"
 fi
 
-echo "\n*** reset trusted marketplace list on device $device to https://$d2gHostname"
+echo "\n*** reset trusted marketplace list on device $device to http://$d2gHostname"
 # TODO : put the host name for the d2g service here!
-./change_trusted_servers.sh $device "https://$d2gHostname"
+./change_trusted_servers.sh $device "http://$d2gHostname"
 
 echo "\n*** push temporary cert DB to device $device"       
 ./push_certdb.sh $device certdb.tmp
