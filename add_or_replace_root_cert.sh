@@ -30,13 +30,13 @@ if [ -z "$certdbdir" ]; then
   exit 1
 fi
 
-if [ "$certname" != "marketplace-dev-public-root" -a \
-     "$certname" != "marketplace-dev-reviewers-root" -a \
-     "$certname" != "marketplace-stage-public-root" -a \
-     "$certname" != "root-ca-reviewers-marketplace" ]; then
-  usage
-  exit 1
-fi
+# if [ "$certname" != "marketplace-dev-public-root" -a \
+#      "$certname" != "marketplace-dev-reviewers-root" -a \
+#      "$certname" != "marketplace-stage-public-root" -a \
+#      "$certname" != "root-ca-reviewers-marketplace" ]; then
+#   usage
+#   exit 1
+# fi
 
 replace_cert()
 {
