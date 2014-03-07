@@ -37,7 +37,6 @@ if [ $wgetResponse -ne 0 ]; then
 fi
 
 echo "\n*** add d2g cert to temporary cert DB"
-# TODO: use the DER generaeted by d2g here
 ./add_or_replace_root_cert.sh certdb.tmp d2g-public-key
 
 echo "\n*** find device name"
@@ -51,9 +50,9 @@ else
 	echo "found device $device"
 fi
 
-echo "\n*** reset trusted marketplace list on device $device to http://$d2gHostname"
-# TODO : put the host name for the d2g service here!
-./change_trusted_servers.sh $device "http://$d2gHostname"
-
 echo "\n*** push temporary cert DB to device $device"       
 ./push_certdb.sh $device certdb.tmp
+
+echo "\n*** reset trusted marketplace list on device $device to http://$d2gHostname"
+./change_trusted_servers.sh $device "http://$d2gHostname"
+

@@ -24,16 +24,17 @@ fi
 # Be nice and wait for the user to connect the device
 adb -s $device wait-for-device
 
-profile=`adb -s $device shell ls data/b2g/mozilla | tr -d '\\r' | grep "\.default$"`
-
 # get prefs from phone
-adb pull data/b2g/mozilla/$profile/prefs.js prefs-old.js
+adb pull /system/b2g/defaults/pref/user.js user-old.js 
 
 # remove old pref value
-grep -v "dom\.mozApps\.signed_apps_installable_from" prefs-old.js > prefs.js
+grep -v "dom\.mozApps\.signed_apps_installable_from" user-old.js > user.js
 # add new pref value
-echo "user_pref(\"dom.mozApps.signed_apps_installable_from\",\"$servers\");" >> prefs.js
+echo "pref(\"dom.mozApps.signed_apps_installable_from\",\"$servers\");" >> user.js
 
-#update prefs
-adb push prefs.js data/b2g/mozilla/$profile/prefs.js
+#update prefs - remount file system as readwrite, push file, remount file system as readonly, reboot
+adb shell mount -o rw,remount /system 
+adb push ~/Downloads/user.js /system/b2g/defaults/pref/user.js 
+adb shell mount -o ro,remount /system 
+adb reboot
 
